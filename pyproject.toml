@@ -17,3 +17,5 @@ dependencies = [
 ]
 [project.scripts]
 xornlp = "xornlpcrack.__main__:main"
+[project.urls]
+Repository = "https://github.com/chrisdlangton/xornlpcrack"
