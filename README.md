@@ -7,6 +7,7 @@ This function attempts to decrypt a ciphertext that has been encrypted using the
 Feature:
 
 - uses NLP for filtering meaningful guesses
+- control the threshold of english words in results
 - will try to guess secret key lengths
 - brute forces all possible keys
 - can also securely generate an XOR ciphertext
@@ -15,7 +16,7 @@ Feature:
 ## Parameters
 
 ```
-usage: xornlp [-h] [-d DOWNLOAD_DIR] [-s] [-v | -vv | -q] [-x EXACT_KEY_LENGTH] [-l MIN_KEY_LENGTH] [-u MAX_KEY_LENGTH] [-f OUTPUT_FILE] [{crack,gen}]
+usage: xornlp [-h] [-d DOWNLOAD_DIR] [-s] [-v | -vv | -q] [-x EXACT_KEY_LENGTH] [-l MIN_KEY_LENGTH] [-u MAX_KEY_LENGTH] [-f OUTPUT_FILE] [-o RESULT_FILE] [-t NLP_THRESHOLD] [{crack,gen}]
 
 positional arguments:
   {crack,gen}
@@ -36,6 +37,10 @@ options:
                         set a max key length to stop trying to derive the secret key
   -f OUTPUT_FILE, --dump-enc-file OUTPUT_FILE
                         when using the generate action, set the filename to output the generated ciphertext value (default: stdout)
+  -o RESULT_FILE, --result-file RESULT_FILE
+                        json file to store results
+  -t NLP_THRESHOLD, --nlp-threshold NLP_THRESHOLD
+                        set a percentage of detected english words in the deciphered text, only guesses above this will be in the results
 ```
 
 ## Basic Usage

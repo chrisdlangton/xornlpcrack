@@ -1,4 +1,4 @@
-import logging, argparse, sys, os, getpass
+import logging, argparse, sys, os, getpass, json
 
 from pathlib import Path
 from rich.logging import RichHandler
@@ -82,6 +82,21 @@ def main():
         dest="output_file",
         default=None,
     )
+    cli.add_argument(
+        "-o",
+        "--result-file",
+        help="json file to store results",
+        dest="result_file",
+        default=None,
+    )
+    cli.add_argument(
+        "-t",
+        "--nlp-threshold",
+        help="set a percentage of detected english words in the deciphered text, only guesses above this will be in the results",
+        dest="nlp_threshold",
+        type=lambda x: (int(x) < 100 and int(x) > 1) and int(x) or sys.exit("threshold between 1 and 100"),
+        default=50,
+    )
     args, input_refs = cli.parse_known_args()
     log_level = logging.WARNING
     if args.log_verbose:
@@ -120,7 +135,21 @@ def main():
             nltk.download('words', quiet=args.quiet, raise_on_error=True, download_dir=download_dir)
             nltk.download('punkt', quiet=args.quiet, download_dir=download_dir)
 
-        derive_key(ciphertext, with_length=args.exact_key_length, max_length=args.max_key_length, min_length=args.min_key_length)
+        results = derive_key(
+            ciphertext,
+            with_length=args.exact_key_length,
+            max_length=args.max_key_length,
+            min_length=args.min_key_length,
+            threshold=args.nlp_threshold,
+        )
+        if args.result_file:
+            dirname, _ = os.path.split(args.result_file)
+            if dirname:
+                os.makedirs(dirname, exist_ok=True)
+            output_path = Path(args.result_file)
+            fields = ['flag', 'key', 'threshold']
+            output_path.write_text(json.dumps([dict(zip(fields, d)) for d in results], default=str))
+
     elif args.action == "gen":
         # Generate from vars for testing
         secret_key = getpass.getpass('Enter secret key:')
@@ -146,8 +175,5 @@ def main():
         logger.critical("use `xornlp gen` to generate a ciphertext for testing or `xornlp crack` to use the tool")
         sys.exit(1)
 
-# ---------------------------
-# Start
-# ---------------------------
 if __name__ == "__main__":
     main()

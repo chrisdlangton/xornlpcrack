@@ -3,4 +3,5 @@
 dist/
 **/__pycache__/
 **/*.egg-info/
-flag.enc
+*.enc
+*.json
