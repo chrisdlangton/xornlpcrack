@@ -1,0 +1,6 @@
+.nltk/
+.venv/
+dist/
+**/__pycache__/
+**/*.egg-info/
+flag.enc

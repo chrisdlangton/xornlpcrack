@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0", "build>=1.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xornlpcrack"
+description = "XOR cracker with NLP"
+version = "0.1.0"
+requires-python = ">=3.12"
+classifiers = ["License :: OSI Approved :: MIT License"]
+authors = [
+    {name = "Christopher Langton", email = "chris@langton.cloud"},
+]
+dependencies = [
+    "nltk >= 3.8.1",
+    "rich >= 13.7.0",
+]
+[project.scripts]
+xornlp = "xornlpcrack.__main__:main"
